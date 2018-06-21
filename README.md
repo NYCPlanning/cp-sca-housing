@@ -11,7 +11,7 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 
 
 ## Data sources
-- **[DCP Housing Developments Database]**(https://github.com/NYCPlanning/db-housingdev) - This database is created by DCP using DOB permit and certificate of occupany data
+- **[DCP Housing Developments Database](https://github.com/NYCPlanning/db-housingdev)** - This database is created by DCP using DOB permit and certificate of occupany data
 - **HPD projects** - This data is requested from HPD. It contains information on HPD's New Construction projects and includes all projects completed within past 2 years, in construction, or projected to close financing within next 2 years
 - **EDC projects** - This data is requested from EDC. It contains information on EDC's pipeline projects that contain residential developments
 - **DCP projects** - This data is generated from DCP's internal project tracking system. Several processing steps are required to identify projects that facilitate residential development (detailed here)
