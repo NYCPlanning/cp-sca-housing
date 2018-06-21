@@ -26,3 +26,31 @@ FROM temp
 WHERE ulurpno = temp.ulurp
 
 /**Repeat above for other boroughs**/
+
+/**Geocode to nyzma first, then to imPACT Visualization polygons**/
+
+ALTER TABLE capitalplanning.all_possible_projects
+ADD COLUMN geom_source text;
+
+UPDATE capitalplanning.all_possible_projects
+SET the_geom = z.the_geom
+FROM capitalplanning.nyzma_may2018 AS z
+WHERE all_possible_projects.project_id = z.project_id;
+
+UPDATE capitalplanning.all_possible_projects
+SET geom_source = 'nyzma'
+WHERE the_geom is not null;
+
+UPDATE capitalplanning.all_possible_projects
+SET the_geom = i.the_geom
+FROM capitalplanning.impact_poly_latest AS i
+WHERE all_possible_projects.project_id = i.projectid
+AND all_possible_projects.the_geom is null;
+
+UPDATE capitalplanning.all_possible_projects
+SET geom_source = 'imPACT Visualization'
+WHERE the_geom is not null AND geom_source is null
+
+/**Identify projects with missing geometries**/
+SELECT * FROM capitalplanning.all_possible_projects
+WHERE the_geom is null
