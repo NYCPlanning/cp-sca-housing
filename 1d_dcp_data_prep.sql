@@ -1,6 +1,6 @@
 -- Download from DCP project tracking system (ZAP) using Advanced Query: Look for ‘Projects’ where project status is Completed, Active, or On-Hold, download all reocrds & all fields
 -- Import into CARTO as bx_projects
-*Note that data must be exported from ZAP borough-by-borough due to limitations on exports with 5000+ records
+-- *Note that data must be exported from ZAP borough-by-borough due to limitations on exports with 5000+ records
 
 /**Identify relevant projects**/
 
@@ -10,7 +10,7 @@ ADD COLUMN check_additional_possible numeric,
 ADD COLUMN too_early_stage numeric;
 
 -- Automatically mark as a relevant project if it's not a South Richmond School Seat Certs, has submitted a PAS, and has 10+ dwelling units
-*Assumed no “lingering” units from projects prior to 2012. Assumption driven by limitation in data associated with projects prior to creation of DCP's project tracking system (formerly imPACT, now ZAP)
+-- *Assumed no “lingering” units from projects prior to 2012. Assumption driven by limitation in data associated with projects prior to creation of DCP's project tracking system (formerly imPACT, now ZAP)
 
 UPDATE capitalplanning.bx_projects
 SET relevant_projects = 1
