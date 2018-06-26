@@ -8,7 +8,7 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 - Process diagram
 
 ## Introduction
-
+- **Disclaimer** - The dataset produced contains information on known and possible housing starts based on currently available project information collected from DOB, HPD, EDC, and DCP. This information does NOT represent a housing projection produced by DCP, nor can DCP attest to the certainty that each of these developments will lead to future housing starts
 
 ## Data sources
 ### Primary data sources
@@ -27,7 +27,6 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 - Open DCP's imPACT Visualization polygons in ArcGIS, export as Shapefile - This dataset contains the polygons associated with all DCP projects. Because there are accuracy concerns with this dataset, nyzma was used where possible
 - Locate tracker of projected units and build year for areawide rezonings prior to 2012
 
-## Limitations
-- **Disclaimer** - The dataset produced contains information on known and possible housing starts based on currently available project information collected from DOB, HPD, EDC, and DCP. This information does NOT represent a housing projection produced by DCP, nor can DCP attest to the certainty that each of these developments will lead to future housing starts
-- **Limitations** - 
+## Limitations and future improvements
+
 
