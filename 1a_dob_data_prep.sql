@@ -60,3 +60,57 @@ FROM completions
 LEFT JOIN permitted ON completions.dob_job_number = permitted.dob_job_number
 
 --- Create new dataset from query as dob_2018_sca_inputs
+
+/***Sum by subdistrict***/
+WITH completions AS (
+SELECT
+    geo_subdist,
+    sum(units_complete_2010) AS units_complete_2010,
+   	sum(units_complete_2011) AS units_complete_2011,
+   	sum(units_complete_2012) AS units_complete_2012,
+   	sum(units_complete_2013) AS units_complete_2013,
+    sum(units_complete_2014) AS units_complete_2014,
+    sum(units_complete_2015) AS units_complete_2015,
+    sum(units_complete_2016) AS units_complete_2016,
+    sum(units_complete_2017) AS units_complete_2017
+FROM
+	capitalplanning.dob_2018_sca_inputs
+WHERE the_geom is not null
+AND status not like '%Application%'
+GROUP BY geo_subdist),
+
+permitted AS (
+SELECT
+    geo_subdist,
+    sum(units_incomplete) AS units_incomplete
+FROM
+	capitalplanning.dob_2018_sca_inputs
+WHERE the_geom is not null
+AND status not like '%Application%'
+GROUP BY geo_subdist),
+
+complete_permitted AS (
+SELECT
+	completions.*,
+	permitted.units_incomplete AS u_permitted
+FROM completions
+LEFT JOIN permitted ON completions.geo_subdist = permitted.geo_subdist),
+
+applications AS (
+SELECT
+    geo_subdist,
+    sum(units_incomplete) AS units_permit_app_status
+FROM
+	capitalplanning.dob_2018_sca_inputs
+WHERE the_geom is not null
+AND status like '%Application%'
+GROUP BY geo_subdist)
+
+SELECT
+	complete_permitted.*,
+	applications.units_permit_app_status AS units_permit_app_status  
+FROM complete_permitted
+LEFT JOIN applications ON complete_permitted.geo_subdist = applications.geo_subdist
+
+--- Export to Excel for sharing
+
