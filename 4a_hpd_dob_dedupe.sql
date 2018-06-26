@@ -99,7 +99,7 @@ ORDER BY dob_job_number
 
 -- Check projects without matches from either of the 2 methods
 -- Results
-	--- Only 2K of the 49.2K units from Completed or In Construction projects were unmatched (4% unmatched)
+	--- Less than 2K of the 49.2K units from Completed or In Construction projects were unmatched (<4% unmatched)
 	--- Remaining unmatched all Projected projects
 	
 SELECT * FROM capitalplanning.hpd_2018_sca_inputs_geo_pts
@@ -114,7 +114,23 @@ ADD COLUMN dob_job_number numeric,
 ADD COLUMN dob_u_matched numeric, 
 ADD COLUMN incremental_hpd_units numeric;
 
+UPDATE capitalplanning.hpd_2018_sca_inputs_geo_pts
+SET dob_job_number = m.dob_job_number, dob_u_matched = m.u_net, match_method = 'address'
+FROM capitalplanning.method1 AS m
+WHERE hpd_2018_sca_inputs_geo_pts.project_id = m.hpd_project_id AND hpd_2018_sca_inputs_geo_pts.building_id = m.building_id;
 
+UPDATE capitalplanning.hpd_2018_sca_inputs_geo_pts
+SET dob_job_number = m.dob_job_number, dob_u_matched = m.u_net, match_method = 'spatial'
+FROM capitalplanning.method2 AS m
+WHERE hpd_2018_sca_inputs_geo_pts.project_id = m.hpd_project_id AND hpd_2018_sca_inputs_geo_pts.building_id = m.building_id
+AND match_method is null
+
+/**Calculate incremental HPD units**/
+UPDATE capitalplanning.hpd_2018_sca_inputs_geo_pts
+SET incremental_hpd_units = 
+(CASE WHEN match_method is null THEN total_units
+ WHEN total_units - dob_u_matched < 0 THEN 0
+ ELSE total_units - dob_u_matched END)
 
 -----------old ------------------
 --- Create new dataset from deduping (too large to update as query)
