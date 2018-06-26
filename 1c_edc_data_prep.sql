@@ -1,6 +1,6 @@
 /**Organization data shared**/
 -- EDC inputs came in 3 files: Excel with project info, Shapefile for site-specific projects, Shapefile for areawide rezonings
--- Uploaded to CARTO as edc_temp
+-- Uploaded to CARTO as edc_temp, edc_site_specific, edc_area_wide_rezonings
 -- Created empty dataset
 
 ALTER TABLE capitalplanning.edc_2018_sca_input
@@ -20,10 +20,19 @@ FROM capitalplanning.edc_temp AS t
 WHERE edc_2018_sca_input.edc_id = t.edc_id
 
 /**Geocode**/
+-- Add edc id to edc_site_specific for matching
 
 UPDATE capitalplanning.edc_2018_sca_input
 SET geom_source = 'edc'
-WHERE edc_id <> 1 AND edc_id <> 5
+FROM capitalplanning.edc_site_specific
+WHERE edc_2018_sca_input.edc_id = s.edc_id
+
+/**Add in polygons for projects not in shared files**/
+-- The 2 projects with missing geo info are both in DCP project data
+
+UPDATE capitalplanning.edc_2018_sca_input
+SET geom_source = 'edc'
+WHERE edc_id <> 1 AND edc_id <> 5;
 
 UPDATE capitalplanning.edc_2018_sca_input
 SET the_geom = d.the_geom
