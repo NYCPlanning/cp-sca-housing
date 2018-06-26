@@ -81,29 +81,7 @@ AND all_possible_projects.the_geom is null;
 
 UPDATE capitalplanning.all_possible_projects
 SET geom_source = 'imPACT Visualization'
-WHERE the_geom is not null AND geom_source is null;
-
-UPDATE capitalplanning.all_possible_projects
-SET the_geom = z.the_geom
-FROM capitalplanning.nyzma_may2018 AS z
-WHERE project_name = 'Melrose Commons North RFP Site B'
-AND z.ulurpno = '080002zmx';
-
-UPDATE capitalplanning.all_possible_projects
-SET geom_source = 'Manual, nyzma'
-FROM capitalplanning.nyzma_may2018 AS z
-WHERE project_name = 'Melrose Commons North RFP Site B'
-
-UPDATE capitalplanning.all_possible_projects
-SET the_geom = z.the_geom
-FROM capitalplanning.nyzma_may2018 AS z
-WHERE all_possible_projects.project_id = '2018X0371'
-AND z.ulurpno = '180131zmx';
-
-UPDATE capitalplanning.all_possible_projects
-SET geom_source = 'Manual, nyzma'
-FROM capitalplanning.nyzma_may2018 AS z
-WHERE all_possible_projects.project_id = '2018X0371'
+WHERE the_geom is not null AND geom_source is null
 
 /**Identify projects with missing geometries**/
 SELECT * FROM capitalplanning.all_possible_projects
