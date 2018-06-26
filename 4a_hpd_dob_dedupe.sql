@@ -67,8 +67,35 @@ AND spatial.dob_job_number NOT IN (SELECT DISTINCT address.dob_job_number FROM a
 
 --- !!!! Saved result of the above 2 methods as new datasets, but ideally could run this altogether
 
--- Check that dob job is not matched to more than 1 hpd project via this method
+-- Check that dob job is not matched to more than 1 hpd project via each method
+-- Results for first method
+	--- 5 DOB jobs were matched to more than 1 HPD project
+	--- Of the 5, 1 is correct (HPD listed as 2 separate projects)
+	--- 1 appears to be a duplicate in HPD list (53558/953668/Phipps Plaza South/KB25 Article XI/56 units AND 52075/953668/PHIPPS PLAZA SOUTH/KB 25/56 units)
+	--- Remaining 3 each have false matches (however, manual edits not made bc only 400 units falsely matched) 
+	
+WITH num AS (
+SELECT dob_job_number, count(*) FROM capitalplanning.method1
+group by dob_job_number
+order by count desc)
 
+SELECT * FROM capitalplanning.method1
+WHERE dob_job_number IN (SELECT dob_job_number FROM num WHERE count > 1)
+ORDER BY dob_job_number
+
+-- Results for second method
+	--- 4 DOB jobs were matched to more than 1 HPD project
+	--- Of the 4, 1 is correct (HPD listed as 2 separate projects)
+	--- Remaining 3 each have false matches (however, manual edits not made bc all are complete AND fewer than 70 units falsely matched) 
+	
+WITH num AS (
+SELECT dob_job_number, count(*) FROM capitalplanning.method2
+group by dob_job_number
+order by count desc)
+
+SELECT * FROM capitalplanning.method2
+WHERE dob_job_number IN (SELECT dob_job_number FROM num WHERE count > 1)
+ORDER BY dob_job_number
 
 -- Check projects without matches from either of the 2 methods
 -- Results
