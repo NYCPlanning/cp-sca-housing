@@ -15,7 +15,8 @@ WHERE h.status = 'Projected'
 /**Calculate incremental EDC units**/
 
 ALTER TABLE capitalplanning.edc_2018_sca_input
-ADD COLUMN incremental_hpd_u_matched numeric;
+ADD COLUMN incremental_hpd_u_matched numeric,
+ADD COLUMN incremental_edc_units numeric;
 
 WITH spatial AS (
 SELECT
@@ -29,4 +30,9 @@ GROUP BY edc_id)
 UPDATE capitalplanning.edc_2018_sca_input
 SET incremental_hpd_u_matched = spatial.sum
 FROM spatial
-WHERE edc_2018_sca_input.edc_id = spatial.edc_id
+WHERE edc_2018_sca_input.edc_id = spatial.edc_id;
+
+UPDATE capitalplanning.edc_2018_sca_input
+SET incremental_edc_units = 
+(CASE WHEN incremental_hpd_u_matched is null THEN total_units
+ ELSE total_units - incremental_hpd_u_matched END)
