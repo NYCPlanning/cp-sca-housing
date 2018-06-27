@@ -1,3 +1,20 @@
+/**Exclude false matches**/
+-- Export dcp_dob_dedupe to Excel
+-- Check matches where diff btw projected and matched >= 50 OR <= - 50
+/**Flagged for manual checks
+P2012K0085	EMPIRE BOULEVARD REZONING
+P2012M0178	47-50 WEST STREET
+P2012M0680	West 117th Street Rezoning
+P2012X0204	Melrose Commons North RFP Site B
+P2014K0469	376-378 Flushing Ave, 43 Franklin Ave(Rose Castle)
+P2015K0353	1860 Eastern Parkway
+P2016X0408	Park Haven (Formerly St. Ann's, East 142nd Street)**/
+
+/**Check for projects that **/
+
+
+
+---------------------- old --------------------------------
 --- Exclude false matches
 ALTER TABLE capitalplanning.dcp_dob_dedupe
 ADD COLUMN manual_check text,
