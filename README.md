@@ -5,7 +5,7 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 - Introduction
 - Data sources
 - Limitations and future improvements
-- Process diagram
+- Processing steps
 
 ## Introduction
 - **Disclaimer** - The dataset produced contains information on known and possible housing starts based on currently available project information collected from DOB, HPD, EDC, and DCP. This information does NOT represent a housing projection produced by DCP, nor can DCP attest to the certainty that each of these developments will lead to future housing starts
@@ -29,4 +29,7 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 
 ## Limitations and future improvements
 
-
+## Processing steps
+| Step  | Description |
+| --- | --- |
+| [1a_dob data prep](https://github.com/mqli322/cp-sca-housing/blob/master/1a_dob_data_prep.sql) | tbd
