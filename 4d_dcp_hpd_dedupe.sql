@@ -1,4 +1,4 @@
---- Double check if any projects in DCP that appear to be HPD-financed were not matched (*Creston Ave, adAPT, Maple Mesa should’ve been in HPD data, but already captured in permits. Bedford Arms & 126th Bus Depot are EDC. ECD likely too early to be in HPD)
+-- Double check if any projects in DCP that appear to be HPD-financed were not matched (*Creston Ave, adAPT, Maple Mesa should’ve been in HPD data, but already captured in permits. Bedford Arms & 126th Bus Depot are EDC. ECD likely too early to be in HPD)
 
 WITH exact AS (
 SELECT 
