@@ -31,5 +31,5 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 
 ## Processing steps
 | Step  | Description |
-| --- | --- |
+| :--- | :--- |
 | [1a_dob data prep](https://github.com/mqli322/cp-sca-housing/blob/master/1a_dob_data_prep.sql) | tbd
