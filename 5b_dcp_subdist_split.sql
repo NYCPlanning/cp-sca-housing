@@ -1,4 +1,4 @@
-/**Calculate proportion of project in subdistrict**/
+/**Calculate proportion of project in subdistrict in order to split units remaining by subdist**/
 
 SELECT 
   	p.the_geom, p.the_geom_webmercator, p.project_id, p.project_name, b.distzone, 
