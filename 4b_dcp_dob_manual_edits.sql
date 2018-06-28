@@ -51,10 +51,14 @@ FROM capitalplanning.dobdev_jobs_20180316 AS j
 WHERE dcp_dob_dedupe.dob_job_number = j.dob_job_number
 AND manual_match = 'manual'
 
-/**Flagged for additional changes in final export based on review
+/**Flagged for additional changes in based on review
 P2012M0635	606 West 57th Street (TF Cornerstone) - built, DOB permit matched but no units remaining --> change in final sheet
 P2012M0564	505-513 West 43rd Street - built, DOB permit matched but no units remaining --> change in final sheet
-P2012K0085	EMPIRE BOULEVARD REZONING - existing use still in place, Uncertain on likelihood due to community opposition
+P2012K0085	EMPIRE BOULEVARD REZONING - existing use still in place, NOT LIKELY due to community opposition --> change in final sheet
 P2012X0204	Melrose Commons North RFP Site B - built, no units remaining (no other DOB permits found) --> change in final sheet
-P2016X0408	Park Haven (Formerly St. Ann's, East 142nd Street) - manually exclude, same as 2018X0371 --> change in final sheet
-P2014K0530	13-15 Greenpoint Avenue - existing use still in place, Uncertain on likelihood --> change in final sheet
+P2016X0408	Park Haven (Formerly St. Ann's, East 142nd Street) - manually exclude, same as 2018X0371
+P2014K0530	13-15 Greenpoint Avenue - existing use still in place, Uncertain on likelihood --> change in final sheet**/
+
+UPDATE capitalplanning.all_possible_projects
+SET manual_exclude = 0, reason_for_excluding = 'Project recorded 2x - same as 2018X0371'
+WHERE project_id = 'P2016X0408'
