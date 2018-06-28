@@ -55,7 +55,6 @@ ORDER BY num_projects DESC
 	--- 81 of the 171 certified/completed projects had matches
 	--- Too conservative if limiting to permits issued strictly AFTER (only 23 of the 171 had matches)
 
-WITH matches AS (
 SELECT 
     i.project_id, project_name, project_description, lead_action, applicant_type, geom_source,
     i.project_completed, certified_referred, units, build_year,
@@ -79,18 +78,7 @@ WHEN certified_referred is not null AND status_q is not null THEN EXTRACT(YEAR F
 WHEN certified_referred is not null AND status_a is not null THEN EXTRACT(YEAR FROM certified_referred) - EXTRACT(YEAR FROM j.status_a) >= -3 END)
 AND manual_exclude is null
 AND applicant_type <> 'DCP'
-ORDER BY project_id, dob_job_number)
-
-SELECT i.project_id, i.project_name, i.lead_action, 
-	i.units, i.build_year,
-	count(matches.dob_job_number) AS num_dob_jobs_matched,
-	sum(matches.u_net) AS dob_u_matched,
-	sum(matches.units)-sum(matches.u_net) AS u_remaining
-FROM capitalplanning.all_possible_projects AS i
-LEFT JOIN matches
-ON i.project_id = matches.project_id
-GROUP BY i.project_id, i.project_name, i.lead_action, i.units, i.build_year
-ORDER BY u_remaining
+ORDER BY project_id, dob_job_number
 
 --- Create new dataset from query AS dcp_dob_dedupe
 
