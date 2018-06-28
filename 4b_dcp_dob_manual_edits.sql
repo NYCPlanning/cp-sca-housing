@@ -1,6 +1,6 @@
 /**Exclude false matches**/
--- Check matches where diff btw projected and matched >= 50 OR <= - 50 (reviewed 31 projects)
--- Check completed projects with build years prior to 2018 (or blank) with no matches (reviewed another 20 projects, only reviewed projects with 50+ units)
+-- Check matches where diff btw projected and matched >= 50 OR <= - 50
+-- Check completed projects with build years prior to 2018 (or blank) with no matches
 
 SELECT i.project_id, i.project_name, i.lead_action, i.project_completed,
 	i.units, i.build_year,
@@ -15,42 +15,20 @@ WHERE i.manual_exclude is null
 GROUP BY i.project_id, i.project_name, i.lead_action, i.project_completed, i.units, i.build_year
 ORDER BY diff_orig_matched
 
-/**Flagged for manual changed based on review
-P2012M0635	606 West 57th Street (TF Cornerstone) - built, no units remaining
-P2012M0564	505-513 West 43rd Street - built, no units remaining
-P2012K0085	EMPIRE BOULEVARD REZONING - existing use still in place, Uncertain on likelihood due to community opposition
-P2012M0178	47-50 WEST STREET - 50 West is built, need to manually add DOB
-P2012X0204	Melrose Commons North RFP Site B - built, no units remaining
-P2016X0408	Park Haven (Formerly St. Ann's, East 142nd Street) - manually exclude, same as 2018X0371
-P2014K0530	13-15 Greenpoint Avenue - existing use still in place, Uncertain on likelihood
-P2012Q0031	FLUSHING MEADOWS EAST REZONING
-P2016K0052	1535 Bedford Ave FRESH (Chair Cert)
-P2014M0430	551 Tenth Ave. (HY DIB application) - built, need to manually add DOB
-P2015M0004	537-545 W. 37th Street (DIB application)
+/**Add in manual matches**/
+-- Create new dataset as dcp_dob_dedupe_add
+-- *Reason for manual matches include:
+	-- Project area recorded by DCP incorrect
+	-- Project is missing project_completed AND certified_referred date
+	-- Matching DOB permit was disapproved or categorized as Other Accomodations
+	
+-- *Checks to consider in future:
+	-- If project is missing project_completed AND certified_referred date, should match based on year implied in project_id (impossible to determine bc no fields indicated project was complete)
+	-- If project is only 1 building and has units remaining, but DOB jobs matched have received final CofO, then exclude remaining units (e.g., 606 W 57th TF Cornerstone, 505-513 West 43rd Street)
+	-- If project has units remaining, check for signal of likelihood to be built if DM permits in progress, if permit filed but disapproved, or permit issued as non-res (esp other accomodations and commercial)
 
--- To do: if project has units remaining, but DOB is C-Co, only 1-to-1 match then exclude units (e.g., TF Cornerstone, 505-513 West 43rd Street)
-
----------------------- old --------------------------------
---- Exclude false matches
 ALTER TABLE capitalplanning.dcp_dob_dedupe
-ADD COLUMN manual_check text,
-ADD COLUMN dob_u_matched numeric,
-ADD COLUMN incremental_dcp_units numeric;
-
-UPDATE capitalplanning.dcp_dob_dedupe
-SET manual_check = 'Different'
-WHERE (project_id = 'P2014K0144' AND dob_job_number = '320374064')
-OR (project_id = 'P2017Q0385' AND dob_job_number = '421067767')
-OR (project_id = 'P2017Q0386' AND dob_job_number = '421067767')
-OR (project_id = 'P2012K0153' AND dob_job_number = '310201616')
-OR (project_id = 'P2012M0485' AND dob_job_number = '110030485')
-OR (project_id = 'P2012M0635' AND dob_job_number = '121190585')
-OR (project_id = 'P2012M0680' AND dob_job_number = '121203866')
-OR (project_id = 'P2012M0680' AND dob_job_number = '122782186')
-OR (project_id = 'P2012Q0316' AND dob_job_number = '421070450')
-OR (project_id = 'P2015K0145' AND dob_job_number = '320577531');
-
---- Add matches manually (checking if any active or on-hold projects are matched, if excluded by the within 3 years rule)
+ADD COLUMN manual_match text;
 
 INSERT INTO capitalplanning.dcp_dob_dedupe (project_id, dob_job_number)
 SELECT a.project_id, a.dob_job_number
@@ -58,19 +36,25 @@ FROM capitalplanning.dcp_dob_dedupe_add AS a
 WHERE CONCAT(a.project_id,a.dob_job_number) NOT IN (SELECT DISTINCT CONCAT(project_id,dob_job_number) FROM capitalplanning.dcp_dob_dedupe);
 
 UPDATE capitalplanning.dcp_dob_dedupe
-SET manual_check = 'Added'
-WHERE borough is null;
+SET manual_match = 'manual'
+WHERE project_name is null;
 
 UPDATE capitalplanning.dcp_dob_dedupe
-SET u_init = j.u_init, u_prop = j.u_prop, u_net = j.u_net, u_net_complete = j.u_net_complete, u_net_incomplete = j.u_net_incomplete
+SET project_name = i.project_name, project_description = i.project_description, lead_action = i.lead_action, applicant_type = i.applicant_type, project_completed = i.project_completed, certified_referred = i.certified_referred, units = i.units, build_year = i.build_year 
+FROM capitalplanning.all_possible_projects AS i
+WHERE dcp_dob_dedupe.project_id = i.project_id
+AND manual_match = 'manual';
+
+UPDATE capitalplanning.dcp_dob_dedupe
+SET dob_type = j.dob_type, dcp_status = j.dcp_status, status_a = j.status_a, status_q = j.status_q, u_init = j.u_init, u_prop = j.u_prop, u_net = j.u_net, u_net_complete = j.u_net_complete, u_net_incomplete = j.u_net_incomplete
 FROM capitalplanning.dobdev_jobs_20180316 AS j
-WHERE manual_check = 'Added' AND dcp_dob_dedupe.dob_job_number = j.dob_job_number;
+WHERE dcp_dob_dedupe.dob_job_number = j.dob_job_number
+AND manual_match = 'manual'
 
-UPDATE capitalplanning.dcp_dob_dedupe
-SET units = p.units
-FROM capitalplanning.all_possible_projects AS p
-WHERE manual_check = 'Added' AND dcp_dob_dedupe.project_id = p.project_id
-
---- Delete false matches
-DELETE FROM capitalplanning.dcp_dob_dedupe
-WHERE manual_check = 'Different'
+/**Flagged for additional changes in final export based on review
+P2012M0635	606 West 57th Street (TF Cornerstone) - built, DOB permit matched but no units remaining --> change in final sheet
+P2012M0564	505-513 West 43rd Street - built, DOB permit matched but no units remaining --> change in final sheet
+P2012K0085	EMPIRE BOULEVARD REZONING - existing use still in place, Uncertain on likelihood due to community opposition
+P2012X0204	Melrose Commons North RFP Site B - built, no units remaining (no other DOB permits found) --> change in final sheet
+P2016X0408	Park Haven (Formerly St. Ann's, East 142nd Street) - manually exclude, same as 2018X0371 --> change in final sheet
+P2014K0530	13-15 Greenpoint Avenue - existing use still in place, Uncertain on likelihood --> change in final sheet
