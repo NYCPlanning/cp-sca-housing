@@ -1,18 +1,34 @@
 /**Exclude false matches**/
--- Export dcp_dob_dedupe to Excel
--- Check matches where diff btw projected and matched >= 50 OR <= - 50
-/**Flagged for manual checks
-P2012K0085	EMPIRE BOULEVARD REZONING
-P2012M0178	47-50 WEST STREET
-P2012M0680	West 117th Street Rezoning
-P2012X0204	Melrose Commons North RFP Site B
-P2014K0469	376-378 Flushing Ave, 43 Franklin Ave(Rose Castle)
-P2015K0353	1860 Eastern Parkway
-P2016X0408	Park Haven (Formerly St. Ann's, East 142nd Street)**/
+-- Check matches where diff btw projected and matched >= 50 OR <= - 50 (reviewed 31 projects)
+-- Check completed projects with build years prior to 2018 (or blank) with no matches (reviewed another 20 projects, only reviewed projects with 50+ units)
 
-/**Check for projects that **/
+SELECT i.project_id, i.project_name, i.lead_action, i.project_completed,
+	i.units, i.build_year,
+	count(matches.dob_job_number) AS num_dob_jobs_matched,
+	sum(matches.u_net) AS dob_u_matched,
+	sum(matches.units)-sum(matches.u_net) AS u_remaining,
+  i.units-sum(matches.u_net) AS diff_orig_matched
+FROM capitalplanning.all_possible_projects AS i
+LEFT JOIN capitalplanning.dcp_dob_dedupe AS matches
+ON i.project_id = matches.project_id
+WHERE i.manual_exclude is null
+GROUP BY i.project_id, i.project_name, i.lead_action, i.project_completed, i.units, i.build_year
+ORDER BY diff_orig_matched
 
+/**Flagged for manual changed based on review
+P2012M0635	606 West 57th Street (TF Cornerstone) - built, no units remaining
+P2012M0564	505-513 West 43rd Street - built, no units remaining
+P2012K0085	EMPIRE BOULEVARD REZONING - existing use still in place, Uncertain on likelihood due to community opposition
+P2012M0178	47-50 WEST STREET - 50 West is built, need to manually add DOB
+P2012X0204	Melrose Commons North RFP Site B - built, no units remaining
+P2016X0408	Park Haven (Formerly St. Ann's, East 142nd Street) - manually exclude, same as 2018X0371
+P2014K0530	13-15 Greenpoint Avenue - existing use still in place, Uncertain on likelihood
+P2012Q0031	FLUSHING MEADOWS EAST REZONING
+P2016K0052	1535 Bedford Ave FRESH (Chair Cert)
+P2014M0430	551 Tenth Ave. (HY DIB application) - built, need to manually add DOB
+P2015M0004	537-545 W. 37th Street (DIB application)
 
+-- To do: if project has units remaining, but DOB is C-Co, only 1-to-1 match then exclude units (e.g., TF Cornerstone, 505-513 West 43rd Street)
 
 ---------------------- old --------------------------------
 --- Exclude false matches
