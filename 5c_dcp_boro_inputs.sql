@@ -73,6 +73,11 @@ AND certified_referred is not null
 AND process_stage <> 'Public Review'
 AND manual_exclude is null
 
+/**Add in final inputs from EDC**/
+UPDATE capitalplanning.all_possible_projects
+SET manual_exclude = 0, reason_for_excluding = 'Originally conceived as all senior'
+WHERE project_id = 'P2012R0625'
+
 /**Export to Excel with subdist distribution for sharing**/
 
 SELECT
