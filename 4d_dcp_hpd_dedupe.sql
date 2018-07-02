@@ -32,6 +32,16 @@ SET hpd_project_name = h.project_name, status = h.status, total_units = h.total_
 FROM capitalplanning.hpd_2018_sca_inputs_geo_pts AS h
 WHERE dcp_hpd_dedupe.hpd_project_id = h.project_id AND dcp_hpd_dedupe.building_id = h.building_id
 
+/**Add in incremental units after HPD DOB deduping**/
+
+ALTER TABLE capitalplanning.dcp_hpd_dedupe
+ADD COLUMN incremental_hpd_units numeric;
+
+UPDATE capitalplanning.dcp_hpd_dedupe
+SET incremental_hpd_units = d.incremental_hpd_units
+FROM capitalplanning.hpd_2018_sca_inputs_geo_pts AS d
+WHERE dcp_hpd_dedupe.hpd_project_id = d.project_id AND dcp_hpd_dedupe.building_id = d.building_id
+
 -- Double check if any projects in DCP that appear to be HPD-financed were not matched
 -- Results
 	-- Creston Ave, adAPT, Maple Mesa should’ve been in HPD data, but manual match not needed bc already fully matched to permits. Bedford Arms & 126th Bus Depot are EDC
