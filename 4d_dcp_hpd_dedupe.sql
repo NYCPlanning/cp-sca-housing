@@ -12,6 +12,8 @@ ON ST_Intersects(h.the_geom,i.the_geom)
 WHERE manual_exclude is null
 ORDER BY i.project_id, hpd_project_id
 
+-- Create new dataset from query as dcp_hpd_dedupe
+
 /**Manually add in missing**/
 -- *One of the two HPD financed Spofford buildings outside of DCP project area
 
