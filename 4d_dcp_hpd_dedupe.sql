@@ -65,3 +65,12 @@ WHERE (project_description LIKE '%HPD%' OR project_description LIKE '%hpd%' OR a
 AND project_completed is null
 GROUP BY project_id, project_name, project_status, units
 ORDER BY remaining_units, units ASC
+
+-- Check if any HPD projects matched to more than 1 DCP project
+-- Results
+	-- One project was matched to multiple - however, correction not needed bc one of the DCP projects will be excluded (same as the other but not closed out by planner)
+SELECT DISTINCT hpd_project_id, building_id, count(*)
+FROM capitalplanning.dcp_hpd_dedupe
+GROUP BY hpd_project_id, building_id
+ORDER BY count DESC
+
