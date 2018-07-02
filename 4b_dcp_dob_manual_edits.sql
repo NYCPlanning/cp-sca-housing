@@ -20,12 +20,12 @@ ORDER BY diff_orig_matched
 -- *Reason for manual matches include:
 	-- Project area recorded by DCP incorrect
 	-- Project is missing project_completed AND certified_referred date
-	-- Matching DOB permit was disapproved or categorized as Other Accomodations
+	-- Matching DOB permit was disapproved or categorized as Other Accomodations -> in this case, matched DOB jobs not counted in DOB file, so units will be counted as DCP units remaining
 	
 -- *Checks to consider in future:
 	-- If project is missing project_completed AND certified_referred date, should match based on year implied in project_id (impossible to determine bc no fields indicated project was complete)
 	-- If project is only 1 building and has units remaining, but DOB jobs matched have received final CofO, then exclude remaining units (e.g., 606 W 57th TF Cornerstone, 505-513 West 43rd Street)
-	-- If project has units remaining, check for signal of likelihood to be built if DM permits in progress, if permit filed but disapproved, or permit issued as non-res (esp other accomodations and commercial)
+	-- If project has units remaining, check for signal of likelihood to be built if DM permits in progress, if permit filed but disapproved (e.g, Caton Flats, 537-545 W 37th), or permit issued as non-res (esp other accomodations and commercial)
 
 ALTER TABLE capitalplanning.dcp_dob_dedupe
 ADD COLUMN manual_match text;
