@@ -7,7 +7,7 @@ SELECT
 FROM 
     capitalplanning.all_possible_projects AS i
 LEFT JOIN
-	capitalplanning.hpd_2018_sca_inputs_geo_pts AS h
+capitalplanning.hpd_2018_sca_inputs_geo_pts AS h
 ON ST_Intersects(h.the_geom,i.the_geom)
 WHERE manual_exclude is null
 ORDER BY i.project_id, hpd_project_id
@@ -74,3 +74,6 @@ FROM capitalplanning.dcp_hpd_dedupe
 GROUP BY hpd_project_id, building_id
 ORDER BY count DESC
 
+/**Delete ones without matches**/
+DELETE FROM capitalplanning.dcp_hpd_dedupe
+WHERE hpd_project_id is null
