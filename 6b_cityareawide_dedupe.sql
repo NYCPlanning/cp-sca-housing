@@ -7,7 +7,6 @@
     --- EDC matching - based on project ID (only Stapleton)
     --- DCP site specific matching - based on spatial overlap. Time between adoption and project not used as restriction bc all site specific projects would be 2012 after
     
-
 ALTER TABLE capitalplanning.cityled_projects
 ADD COLUMN num_dob_jobs_matched numeric, 
 ADD COLUMN dob_u_matched numeric, 
@@ -37,6 +36,7 @@ AND j.x_dup_flag <> 'Possible Duplicate'
 AND j.x_outlier <> 'true'
 AND j.dob_type <> 'DM'
 AND j.u_net > 0
+AND left(z.project_id,5) NOT IN ('P2015', 'P2016', 'P2017', 'P2018')
 GROUP BY z.project_id, z.project_na, z.projected_units),
 
 hpdmatches AS (
@@ -49,6 +49,7 @@ LEFT JOIN
 ON ST_Intersects(j.the_geom,z.the_geom)
 WHERE z.in_site_specific is null AND z.projected_units >= 200
 AND EXTRACT(YEAR FROM j.x_start_date) - EXTRACT(YEAR FROM z.effective) >= -3
+AND left(z.project_id,5) NOT IN ('P2015', 'P2016', 'P2017', 'P2018')
 GROUP BY z.project_id, z.project_na, z.projected_units),
 
 edcmatches AS (
@@ -59,6 +60,7 @@ FROM
     capitalplanning.edc_2018_sca_input AS j
 WHERE z.project_id = j.dcp_project_id
 AND z.in_site_specific is null AND z.projected_units >= 200
+AND left(z.project_id,5) NOT IN ('P2015', 'P2016', 'P2017', 'P2018')
 GROUP BY z.project_id, z.project_na, z.projected_units),
 
 dcpmatches AS (
@@ -71,6 +73,25 @@ WHERE ST_Intersects(j.the_geom,z.the_geom)
 AND z.in_site_specific is null AND z.projected_units >= 200
 AND j.manual_exclude is null
 AND j.likely_to_be_built <> 'No'
+SELECT
+	z.project_id, z.project_na, z.projected_units, j.dob_job_number, j.dob_address, j.u_net
+FROM 
+	capitalplanning.cityled_projects AS z
+LEFT JOIN
+    capitalplanning.dobdev_jobs_20180316 AS j
+ON ST_Intersects(j.the_geom,z.the_geom)
+WHERE z.in_site_specific is null AND z.projected_units >= 200
+AND (EXTRACT(YEAR FROM j.status_a) - EXTRACT(YEAR FROM z.effective) >= -3
+OR EXTRACT(YEAR FROM j.status_q) - EXTRACT(YEAR FROM z.effective) >= -3)
+AND j.dcp_status <> 'Withdrawn'
+AND j.dcp_status <> 'Disapproved'
+AND j.dcp_status <> 'Suspended'
+AND (j.dcp_occ_init = 'Residential' OR j.dcp_occ_prop = 'Residential')
+AND j.x_dup_flag <> 'Possible Duplicate'
+AND j.x_outlier <> 'true'
+AND j.dob_type <> 'DM'
+AND j.u_net > 0
+AND left(z.project_id,5) NOT IN ('P2015', 'P2016', 'P2017', 'P2018')
 GROUP BY z.project_id, z.project_na, z.projected_units),
 
 combined AS (
@@ -124,3 +145,22 @@ WHEN dob_u_matched < projected_units AND incremental_hpd_u_matched is null AND i
 UPDATE capitalplanning.cityled_projects
 SET remaining_units = 0
 WHERE remaining_units <= 10
+
+/**Add DTRF - manually confirmed matches using rezoning area**/
+-- 
+
+/**Add ENY - manually matched**/
+-- *ENY - Block 4143 (2 large HPD projects at Atlantic Chestnut included, even though in RWCDS they were projected to be non-res and included in No Action)
+
+
+/**Add manual changes based on knowledge of rezonings**/
+-- *Broadway Triangle URA - took out Pfizer, explicitly not included in URA
+
+ALTER TABLE capitalplanning.cityled_projects
+ADD COLUMN manual_changes numeric,
+ADD COLUMN clean_remaining_units numeric;
+
+UPDATE capitalplanning.cityled_projects
+SET manual_changes = (
+CASE WHEN project_na = 'BROADWAY TRIANGLE URA' THEN -1146
+WHEN project_na = 
