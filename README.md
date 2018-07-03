@@ -31,8 +31,15 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 
 ## Limitations and future improvements
 - **Limitations**
-  * (exercise disretion when deciding how to use inputs bc of varying degrees of uncertainty)
-  * (deduping not perfect)
+  * Exercise disretion when deciding how to use inputs because data inputs vary in level of certainty
+        * | Data type | Certainty | Rationale |
+        * | :--- | :--- | 
+        * | DOB permit issued and permit apps | Higher certainty | Historical analysis suggest 95% of permits issued are completed within 5 years and tbd |
+        * | HPD-financed projects | Higher certainty | Projected projects listed are expected to close financing in next 2 years |
+        * | EDC-sponsored projects | Higher certainty | Projected projects listed are expected to be complete |  
+        * | DCP approved | Lower certainty | Applicant may decide to not pursue proposed project or change use |
+        * | DCP active and on-holder | Lower certainty | Application may be on-hold, withdrawn, disapproved, or change use |
+   * (deduping not perfect)
 - **Future improvements**
   * (accurate project area)
   * (cleaner DCP data)
