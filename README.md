@@ -52,3 +52,7 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 | [2d_dcp_project_data_cleaning](https://github.com/mqli322/cp-sca-housing/blob/master/2d_dcp_project_data_cleaning.sql) | Manually exclude irrelevant projects or add info using project descriptions and documents |
 | [3a_hpd_dob_dedupe](https://github.com/mqli322/cp-sca-housing/blob/master/3a_hpd_dob_dedupe.sql) | Identify HPD projects already captured in DOB data - first if same address, then if points within 3m AND start date/permit app or issued date within 3 yrs |
 | [3b_hpd_export](https://github.com/mqli322/cp-sca-housing/blob/master/3b_hpd_export.sql) | Add sub-district boundaries and export |
+| [3c_edc_hpd_dedupe](https://github.com/mqli322/cp-sca-housing/blob/master/3c_edc_hpd_dedupe.sql) | Identify EDC projects already captured in HPD data - if point representing HPD project within polygon representing EDC project area |
+| [3d_edc_export](https://github.com/mqli322/cp-sca-housing/blob/master/3d_edc_export.sql) | Add sub-district boundaries and export |
+| [4a_dcp_dob_dedupe](https://github.com/mqli322/cp-sca-housing/blob/master/4a_dcp_dob_dedupe.sql) | Identify DCP projects already captured in DOB data - if point representing DOB job within polygon representing DCP project area AND DOB status a or q (application field or permit issued) no more than 3 years prior to DCP project completion or certification |
+
