@@ -33,21 +33,25 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 - **Limitations**
   * Exercise disretion when deciding how to use inputs because data inputs vary in level of certainty
     - Higher certainty
-      - DOB  
-        * | Data type | Certainty | Rationale |
-        * | :--- | :--- | 
-        * | DOB permit issued and permit apps | Higher certainty | Historical analysis suggest 95% of permits issued are completed within 5 years and tbd |
-        * | HPD-financed projects | Higher certainty | Projected projects listed are expected to close financing in next 2 years |
-        * | EDC-sponsored projects | Higher certainty | Projected projects listed are expected to be complete |  
-        * | DCP approved | Lower certainty | Applicant may decide to not pursue proposed project or change use |
-        * | DCP active and on-holder | Lower certainty | Application may be on-hold, withdrawn, disapproved, or change use |
-   * (deduping not perfect)
+      - DOB permit issued & permit apps - Historical analysis suggest 95% of permits issued are completed within 5 years and tbd
+      - HPD-financed projects - Projected projects listed are expected to close financing in next 2 years
+      - EDC-sponsored projects - Projected projects listed are expected to be complete given agreement with EDC
+    - Lower certainty
+      - DCP approved - Applicant may decide to not pursue proposed project or change use
+      - DCP active and on-hold - Application may be on-hold, withdrawn, disapproved, or change use
+    - Uncertain
+      - Approved city-led areawide rezonings - NOT based on known developments, but units estimated based on change in residential FAR allowed
+      - Not yet approved city-led areawide rezonings - Rezoning may be on-hold and actions may change. NOT based on known developments, but units estimated based on change in residential FAR allowed
+  * Deduping will never be perfect, but based on best available data and sound rationale detailed in repo
+  * Unit counts will never be perfect. DOB units are self-reported or others are projected (esp areawide rezonings)
+  
 - **Future improvements**
-  * (accurate project area)
-  * (cleaner DCP data)
-  * (areawide upzoned lots only)
-  * (additional analyses - timeframe thresholds, pct of permit apps that are complete, accuracy of areawide projections)
-  * (tracking if project went commercial)
+  * Improve geocoding quality and standardize geocoding methods (across all inputs)
+  * Automate data capture of key fields and establish validations on DCP project data
+  * Create database system that tracks approvals and mods that may affect projected residential units
+  * Digitize upzoned lots from city-led areawide rezonings to avoid overcounting DOB units as result of rezoning
+  * Digitize total projected units AND no-action development list to allow for deduping (currently using incremenal projected units bc unable to dedupe no-action development list)
+  * Use additional analyses to inform deduping - timeframe thresholds, checks if project went non-residential (esp. commercial or hotel), accuracy of areawide projections
 
 ## Processing steps
 | Step  | Description |
