@@ -32,6 +32,8 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 ## Limitations and future improvements
 - **Limitations**
   * Exercise disretion when deciding how to use inputs because data inputs vary in level of certainty
+    - Higher certainty
+      - DOB  
         * | Data type | Certainty | Rationale |
         * | :--- | :--- | 
         * | DOB permit issued and permit apps | Higher certainty | Historical analysis suggest 95% of permits issued are completed within 5 years and tbd |
