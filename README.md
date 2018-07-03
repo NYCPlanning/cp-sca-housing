@@ -49,7 +49,7 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
   * Improve geocoding quality and standardize geocoding methods (across all inputs)
   * Automate data capture of key fields and establish validations on DCP project data
   * Create database system that tracks approvals and mods that may affect projected residential units
-  * Digitize upzoned lots from city-led areawide rezonings to avoid overcounting DOB units as result of rezoning
+  * Digitize upzoned lots from city-led areawide rezonings to avoid overcounting DOB units as result of rezoning (currently using rezoning area for studies prior to ENY. Also deduped using upzoned lots identified via imperfect PLUTO spatial matching - not meaninfully lower
   * Digitize total projected units AND no-action development list to allow for deduping (currently using incremenal projected units bc unable to dedupe no-action development list)
   * Use additional analyses to inform deduping - timeframe thresholds, checks if project went non-residential (esp. commercial or hotel), accuracy of areawide projections
 
