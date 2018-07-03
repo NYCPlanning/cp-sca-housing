@@ -33,7 +33,7 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 - **Limitations**
   * Exercise disretion when deciding how to use inputs because data inputs vary in level of certainty
     - Higher certainty
-      - DOB permit issued & permit apps - Historical analysis suggest 95% of permits issued are completed within 5 years and tbd
+      - DOB permit issued & permit apps - Historical analysis suggest 95% of permits issued are completed within 5 years and 75% of permit apps in-progress or filed are completed within 5 years. While 2/3 of permit apps are disapproved or withdrawn in the first year, that figure drops sharply by year 2, averaging ~10-15% overall
       - HPD-financed projects - Projected projects listed are expected to close financing in next 2 years
       - EDC-sponsored projects - Projected projects listed are expected to be complete given agreement with EDC
     - Lower certainty
