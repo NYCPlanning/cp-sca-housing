@@ -146,11 +146,11 @@ UPDATE capitalplanning.cityled_projects
 SET remaining_units = 0
 WHERE remaining_units <= 10
 
-/**Add DTRF - manually confirmed matches using rezoning area**/
--- 
-
-/**Add ENY - manually matched**/
+/**Check ENY - manually matches to limit to upzoned lots only**/
 -- *ENY - Block 4143 (2 large HPD projects at Atlantic Chestnut included, even though in RWCDS they were projected to be non-res and included in No Action)
+
+/**Check DTRF - manually confirmed matches using rezoning area method on upzoned lots**/
+-- 
 
 
 /**Add manual changes based on knowledge of rezonings**/
