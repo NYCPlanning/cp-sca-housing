@@ -61,7 +61,7 @@ SQL and processing steps used to create housing inputs to SCA's Housing Pipeline
 | [1c_edc data prep](https://github.com/mqli322/cp-sca-housing/blob/master/1c_edc_data_prep.sql) | Add polygons representing project area|
 | [2a_dcp_data_prep](https://github.com/mqli322/cp-sca-housing/blob/master/2a_dcp_data_prep.sql) | Find discretionary actions that facilitate 10+ residential units, excluding South Richmond school seat certs |
 | [2b_dcp_geocode](https://github.com/mqli322/cp-sca-housing/blob/master/2b_dcp_geocode.sql) | Add polygons representing project area |
-| [2c_dcp_geocode_manual](https://github.com/mqli322/cp-sca-housing/edit/master/2c_dcp_geocode_manual.sql) | Manually add polygons if not captured (or not accurately captured) in existing sources |
+| [2c_dcp_geocode_manual](https://github.com/NYCPlanning/cp-sca-housing/blob/master/2c_dcp_geocode_manual.sql) | Manually add polygons if not captured (or not accurately captured) in existing sources |
 | [2d_dcp_project_data_cleaning](https://github.com/mqli322/cp-sca-housing/blob/master/2d_dcp_project_data_cleaning.sql) | Manually exclude irrelevant projects or add info using project descriptions and documents |
 | [3a_hpd_dob_dedupe](https://github.com/mqli322/cp-sca-housing/blob/master/3a_hpd_dob_dedupe.sql) | Identify HPD projects already captured in DOB data - first if same address, then if points within 3m AND start date/permit app or issued date within 3 yrs |
 | [3b_hpd_export](https://github.com/mqli322/cp-sca-housing/blob/master/3b_hpd_export.sql) | Add sub-district boundaries and export |
