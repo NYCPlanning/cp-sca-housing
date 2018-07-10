@@ -78,8 +78,14 @@ UPDATE capitalplanning.all_possible_projects
 SET manual_exclude = 0, reason_for_excluding = 'Originally conceived as all senior'
 WHERE project_id = 'P2012R0625'
 
-/**Add in final inputs from DCP boroughs - adjusting likely to be built & rationale or deleting if all senior**/
+/**Add in final inputs from DCP boroughs**/
+-- Adjusting likelihood to be built
 UPDATE capitalplanning.all_possible_projects
 SET likely_to_be_built = c.remaining_units_likely_to_be_built, rationale = c.rationale
 FROM capitalplanning.project_info_cleaning_072018 AS c
 WHERE all_possible_projects.project_id = c.project_id
+
+-- Adding in P2017R0111 (uncertain why it was not captured automatically)
+INSERT INTO capitalplanning.all_possible_projects (borough, community_districts, lead_planner, project_id, project_name, project_description, lead_action, project_status, process_stage, project_completed, certified_referred, system_target_certification_date, applicant_type, new_dwelling_units, total_dwelling_units_in_project)
+SELECT borough, community_districts, lead_planner, project_id, project_name, project_description, lead_action, project_status, process_stage_name_stage_id_process_stage, project_completed, certified_referred, system_target_certification_date, applicant_type, new_dwelling_units, total_dwelling_units_in_project FROM si_projects
+WHERE project_id = 'P2017R0111'
