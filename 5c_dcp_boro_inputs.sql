@@ -77,3 +77,9 @@ AND manual_exclude is null
 UPDATE capitalplanning.all_possible_projects
 SET manual_exclude = 0, reason_for_excluding = 'Originally conceived as all senior'
 WHERE project_id = 'P2012R0625'
+
+/**Add in final inputs from DCP boroughs - adjusting likely to be built & rationale or deleting if all senior**/
+UPDATE capitalplanning.all_possible_projects
+SET likely_to_be_built = c.remaining_units_likely_to_be_built, rationale = c.rationale
+FROM capitalplanning.project_info_cleaning_072018 AS c
+WHERE all_possible_projects.project_id = c.project_id
