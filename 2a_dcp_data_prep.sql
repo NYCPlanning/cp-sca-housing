@@ -1,6 +1,5 @@
--- Download from DCP project tracking system (ZAP) using Advanced Query: Look for ‘Projects’ where project status is Completed, Active, or On-Hold, download all reocrds & all fields
+-- Obtain list of DCP project (Completed, Active, or On-Hold)
 -- Import into CARTO as bx_projects, bk_projects, mn_projects, qn_projects, si_projects
--- *Note that data must be exported from ZAP borough-by-borough due to limitations on exports with 5000+ records
 
 /**Identify relevant projects**/
 
